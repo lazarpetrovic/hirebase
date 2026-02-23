@@ -7,7 +7,7 @@ export default function Navigation() {
 
     return (
         <nav className="sticky top-0 z-50 bg-white border-b border-[#E2E8F0]">
-            <div className="container mx-auto max-w-7xl">
+            <div className="mx-auto max-w-7xl">
                 <div className="flex items-center justify-between py-4">
                     <div className="flex-shrink-0">
                         <a href="/" className="text-xl font-semibold text-gray-900">Hirebase</a>
