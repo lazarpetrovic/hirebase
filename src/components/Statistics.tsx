@@ -12,7 +12,7 @@ const stats = [
     {
       value: '5,000+',
       label: 'Active Users',
-      description: 'Job seekers trust Hiredge daily',
+      description: 'Job seekers trust Hirebase daily',
     },
     {
       value: '98%',
