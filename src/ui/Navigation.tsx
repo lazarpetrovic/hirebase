@@ -6,7 +6,7 @@ export default function Navigation() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     return (
-        <nav className="sticky top-0 z-50 bg-white border-b border-[#E2E8F0]">
+        <nav className="sticky top-0 z-50 bg-white border-b border-[#E2E8F0] overflow-x-hidden">
             <div className="mx-auto max-w-7xl">
                 <div className="flex items-center justify-between py-4">
                     <div className="flex-shrink-0">

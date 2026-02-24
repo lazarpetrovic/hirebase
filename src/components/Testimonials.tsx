@@ -1,5 +1,5 @@
 const mainTestimonial = {
-    quote: "Hiredge completely transformed how I approached my job search. I went from scattered spreadsheets to a clear, visual system that kept me focused and motivated. Within 6 weeks, I had 3 offers.",
+    quote: "Hirebase completely transformed how I approached my job search. I went from scattered spreadsheets to a clear, visual system that kept me focused and motivated. Within 6 weeks, I had 3 offers.",
     author: 'Sarah Chen',
     role: 'Senior Product Designer',
     company: 'at Figma',

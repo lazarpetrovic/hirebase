@@ -6,6 +6,10 @@ import Product from "./components/Product"
 import Statistics from "./components/Statistics"
 import Testimonials from "./components/Testimonials"
 import Pricing from "./components/Pricing"
+import Faq from "./components/FAQ"
+import FinalCTA from "./components/FinalCTA"
+import Contact from "./components/Contact"
+import Footer from "./ui/Footer"
 
 function App() {
   return (
@@ -18,6 +22,10 @@ function App() {
       <Statistics />
       <Testimonials />
       <Pricing />
+      <Faq />
+      <FinalCTA />
+      <Contact />
+      <Footer />  
     </>
   )
 }

@@ -2,14 +2,14 @@ import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
     return (
-        <section className="bg-white py-16 md:py-24 lg:py-32 px-6 lg:px-8">
+        <section className="bg-white py-16 md:py-24 lg:py-32 px-6 lg:px-8 overflow-x-hidden">
             <div className="mx-auto max-w-7xl">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     <div className="text-center lg:text-left">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 leading-[1.1] tracking-tight mb-6">
                             Bring Structure to Your Job Search.
                         </h1>
-                        <p className="text-[18px] md:text-[20px] font-normal text-gray-600 leading-relaxed mb-8 max-w-[560px] mx-auto lg:mx-0">
+                        <p className="text-[18px] md:text-[20px] font-normal text-gray-600 leading-relaxed mb-8 w-full md:max-w-[560px] mx-auto lg:mx-0">
                             Track applications, interviews, and offers in one intelligent workspace.
                             Transform your job search from chaos to clarity.
                         </p>
