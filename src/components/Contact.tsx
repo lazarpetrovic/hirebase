@@ -12,7 +12,7 @@ export default function Contact() {
     }
 
     return (
-        <section className="bg-white py-20 md:py-28 px-6 lg:px-8">
+        <section id="contact" className="bg-white py-20 md:py-28 px-6 lg:px-8 overflow-x-hidden">
             {toast && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-lg bg-gray-900 text-white text-sm font-medium shadow-lg">
                     Message sent successfully.
@@ -20,7 +20,7 @@ export default function Contact() {
             )}
             <div className="mx-auto max-w-7xl">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    <div>
+                    <div className="col-start-2 md:col-start-1">
                         <form ref={formRef} className="space-y-5" onSubmit={handleSubmit}>
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">Name</label>
@@ -63,7 +63,7 @@ export default function Contact() {
                             </button>
                         </form>
                     </div>
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-12 col-start-1 md:col-start-2">
                         <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-4 tracking-tight">Get in touch</h2>
                         <p className="text-lg mx-auto max-w-[600px] font-light text-gray-600">
                             We're here to help you get the most out of Hirebase.

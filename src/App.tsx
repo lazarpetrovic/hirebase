@@ -10,11 +10,16 @@ import Faq from "./components/FAQ"
 import FinalCTA from "./components/FinalCTA"
 import Contact from "./components/Contact"
 import Footer from "./ui/Footer"
+import { Routes, Route } from "react-router-dom"
+import SignIn from "./pages/SignIn"
+import SignUp from "./pages/SignUp"
 
-function App() {
+
+export default function App() { 
   return (
-    <>
-      <Navigation />
+    <Routes>
+      <Route path="/" element={<>
+        <Navigation />
       <Hero />
       <Companies />
       <Features />
@@ -26,8 +31,12 @@ function App() {
       <FinalCTA />
       <Contact />
       <Footer />  
-    </>
+      </>} />
+      <Route path="/signin" element={<><SignIn />
+      <Footer /></>} />
+      <Route path="/signup" element={<><SignUp />
+      <Footer /></>} />
+    </Routes>
   )
 }
 
-export default App
