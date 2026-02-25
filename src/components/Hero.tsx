@@ -1,23 +1,28 @@
 import { ArrowRight } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 export default function Hero() {
+    const navigate = useNavigate();
     return (
-        <section className="bg-white py-16 md:py-24 lg:py-32 px-6 lg:px-8">
+        <section id="hero" className="bg-white py-16 md:py-24 lg:py-32 px-6 lg:px-8 overflow-x-hidden">
             <div className="mx-auto max-w-7xl">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     <div className="text-center lg:text-left">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 leading-[1.1] tracking-tight mb-6">
                             Bring Structure to Your Job Search.
                         </h1>
-                        <p className="text-[18px] md:text-[20px] font-normal text-gray-600 leading-relaxed mb-8 max-w-[560px] mx-auto lg:mx-0">
+                        <p className="text-[18px] md:text-[20px] font-normal text-gray-600 leading-relaxed mb-8 w-full md:max-w-[560px] mx-auto lg:mx-0">
                             Track applications, interviews, and offers in one intelligent workspace.
                             Transform your job search from chaos to clarity.
                         </p>
                         <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
-                            <button className="px-8 py-3.5 rounded-xl bg-[#3B82F6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-[15px]">
+                            <button onClick={() => navigate('/signup')} className="px-8 py-3.5 rounded-xl bg-[#3B82F6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-[15px]">
                                 Start Free
                             </button>
-                            <button className="group gap-2 px-8 py-3.5 bg-white text-gray-700 border border-[#e2e8f0] rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-300 font-normal text-base inline-flex items-center justify-center">
+                            <button
+                                type="button"
+                                onClick={() => navigate('/product')}
+                                className="group gap-2 px-8 py-3.5 bg-white text-gray-700 border border-[#e2e8f0] rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-300 font-normal text-base inline-flex items-center justify-center"
+                            >
                                 View Product <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300"/>
                             </button>
                         </div>

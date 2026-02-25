@@ -20,7 +20,7 @@ const features = [
 
 export default function Features() {
     return (
-        <section className="bg-white py-20 md:py-28 px-6 lg:px-8">
+        <section id="features" className="bg-white py-20 md:py-28 px-6 lg:px-8 overflow-x-hidden">
             <div className="mx-auto max-w-7xl">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-4 tracking-tight">
@@ -32,7 +32,7 @@ export default function Features() {
                 </div>
                 <div className="grid md:grid-cols-3 gap-8 lg:gap-10">
                     {features.map((feature, index) => (
-                        <div key="index" className="group bg-white p-8 rounded-2xl border border-[#e2e8f0] hover:shadow-lg hover:translate-y-[-4px] transition-all duration-300">
+                        <div key={index} className="group bg-white p-8 rounded-2xl border border-[#e2e8f0] hover:shadow-lg hover:translate-y-[-4px] transition-all duration-300">
                             <div className="mb-8 w-12 h-12 flex items-center justify-center rounded-xl bg-[#f0f9ff] group-hover:bg-[#3B82F6]/20 transition-colors duration-300">
                                 <feature.icon size={24} className="text-[#3B82F6]" />
                             </div>

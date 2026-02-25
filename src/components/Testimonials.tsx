@@ -1,5 +1,5 @@
 const mainTestimonial = {
-    quote: "Hiredge completely transformed how I approached my job search. I went from scattered spreadsheets to a clear, visual system that kept me focused and motivated. Within 6 weeks, I had 3 offers.",
+    quote: "Hirebase completely transformed how I approached my job search. I went from scattered spreadsheets to a clear, visual system that kept me focused and motivated. Within 6 weeks, I had 3 offers.",
     author: 'Sarah Chen',
     role: 'Senior Product Designer',
     company: 'at Figma',
@@ -23,19 +23,19 @@ const mainTestimonial = {
 
 export default function Testimonials() {
     return (
-        <section className="bg-[#f8fafc] py-20 md:py-28 px-6 lg:px-8">
+        <section id="testimonials" className="bg-[#f8fafc] py-20 md:py-28 px-6 lg:px-8 overflow-x-hidden">
             <div className="mx-auto max-w-7xl">
                 <div className="bg-white rounded-2xl border border-[#e2e8f0] p-8 md:p-12 shadow-xl hover:shadow-2xl transition-all duration-300">
                     <div className="max-w-[900px] mx-auto">
-                    <p className="text-gray-900 text-[24px] md:text-[28px] mb-8 font-normal text-base leading-relaxed">{mainTestimonial.quote}</p>
+                    <p className="text-gray-900 text-[18px] sm:text-[20px] md:text-[24px] lg:text-[28px] mb-8 font-normal text-base leading-relaxed">{mainTestimonial.quote}</p>
                         <div className="flex items-center gap-4">
                             <div className="w-14 h-14 rounded-full overflow-hidden border border-[#e2e8f0]">
                                 <img src={mainTestimonial.image} alt={mainTestimonial.author} className="w-full h-full object-cover" />
                             </div>
                             <div>
-                                <h3 className="text-gray-900 font-medium text-lg">{mainTestimonial.author}</h3>
+                                <h3 className="text-gray-900 font-medium text-[14px] sm:text-[18px] md:text-[20px] lg:text-[22px]">{mainTestimonial.author}</h3>
                                 <div>
-                                    <p className="text-gray-600 font-light text-base">{mainTestimonial.role}{' '}{mainTestimonial.company}</p>
+                                    <p className="text-gray-600 font-light text-[12px] sm:text-[16px] md:text-[18px] lg:text-[20px]">{mainTestimonial.role}{' '}{mainTestimonial.company}</p>
                                 </div>
                             </div>
                         </div>
@@ -50,9 +50,9 @@ export default function Testimonials() {
                                     <img src={testimonial.image} alt={testimonial.author} className="w-full h-full object-cover" />
                                 </div>
                                 <div>
-                                    <h3 className="text-gray-900 font-medium text-lg">{testimonial.author}</h3>
+                                    <h3 className="text-gray-900 font-medium text-[14px] sm:text-[18px] md:text-[20px] lg:text-[22px]">{testimonial.author}</h3>
                                     <div>
-                                        <p className="text-gray-600 font-light text-base">{mainTestimonial.role}{' '}{mainTestimonial.company}</p>
+                                        <p className="text-gray-600 font-light text-[12px] sm:text-[16px] md:text-[18px] lg:text-[20px]">{mainTestimonial.role}{' '}{mainTestimonial.company}</p>
                                     </div>
                                 </div>
                             </div>

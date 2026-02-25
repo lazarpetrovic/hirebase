@@ -29,7 +29,7 @@ const showcases = [
 
 export default function Product() {
     return (
-        <section className="bg-[#f8fafc] py-20 md:py-28 px-6 lg:px-8">
+        <section id="product" className="bg-[#f8fafc] py-20 md:py-28 px-6 lg:px-8 overflow-x-hidden">
             <div className="mx-auto max-w-7xl space-y-24 md:space-y-32">
                 {showcases.map((showcase, index) => (
                     <div key={index} className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${showcase.reverse ? 'lg:flex-row-reverse' : ''}`}>
