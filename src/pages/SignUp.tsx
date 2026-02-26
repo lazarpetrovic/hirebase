@@ -20,6 +20,13 @@ export default function SignUp() {
         }
     }
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(name, email, password, termsAndPrivacy);
+        // TODO: Implement sign up logic
+        // TODO: Implement sign up logic
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#ffffff] flex items-center justify-center px-6 py-20">
             <div className="w-full max-w-[480px]">
@@ -29,14 +36,14 @@ export default function SignUp() {
                     <p className="text-gray-600 font-light text-lg">Start tracking your job applications for free</p>
                 </div>
                 <div className="border border-[#e2e8f0] rounded-2xl p-8 shadow-xl bg-white">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="mb-4">
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                             <div className="relative">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                     <User size={18} className="text-gray-400"/>
                                 </div>
-                                <input type="text" id="name" className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Name" />
+                                <input type="text" id="name" onChange={(e) => setName(e.target.value)} className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Name" />
                             </div>
                         </div>
                         <div className="mb-4">
@@ -45,7 +52,7 @@ export default function SignUp() {
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                     <Mail size={18} className="text-gray-400"/>
                                 </div>
-                                <input type="email" id="email" className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Email" />
+                                <input type="email" id="email" onChange={(e) => setEmail(e.target.value)} className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Email" />
                             </div>
                         </div>
                         <div className="mb-4">
@@ -62,7 +69,7 @@ export default function SignUp() {
                             {passwordLength || <p className="text-xs text-gray-500 font-light mt-2">Must be at least 8 characters</p>}
                         </div>
                         <div className="mb-4 flex items-center">
-                            <input type="checkbox" id="terms" className="w-4 h-4 rounded border-[#E2E8F0] text-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20" />
+                            <input type="checkbox" id="terms" onChange={(e) => setTermsAndPrivacy(e.target.checked)} className="w-4 h-4 rounded border-[#E2E8F0] text-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20" />
                             <label htmlFor="terms" className="ml-2 text-[14px] text-gray-700">I agree to the <Link to="/terms" className="text-[#3b82f6] hover:text-[#2563EB] transition-colors">Terms of Service</Link> and <Link to="/privacy" className="text-[#3b82f6] hover:text-[#2563EB] transition-colors">Privacy Policy</Link></label>
                         </div>
                         <button type="button" className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#3b82f6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-md">Create Account</button>

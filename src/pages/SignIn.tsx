@@ -8,6 +8,13 @@ export default function SignIn() {
     const [password, setPassword] = useState("");
     const [visiblePassword, setVisiblePassword] = useState(false);
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(email, password);
+        // TODO: Implement sign in logic
+        // TODO: Implement sign in logic
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#ffffff] flex items-center justify-center px-6 py-20">
             <div className="w-full max-w-[480px]">
@@ -17,14 +24,14 @@ export default function SignIn() {
                     <p className="text-gray-600 font-light text-lg">Sing in to continue tracking your job applications</p>
                 </div>
                 <div className="border border-[#e2e8f0] rounded-2xl p-8 shadow-xl bg-white">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="mb-4">
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                             <div className="relative">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                     <Mail size={18} className="text-gray-400"/>
                                 </div>
-                                <input type="email" id="email" className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Email" />
+                                <input type="email" id="email" onChange={(e) => setEmail(e.target.value)} className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Email" />
                             </div>
                         </div>
                         <div className="mb-4">
@@ -36,7 +43,7 @@ export default function SignIn() {
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                     <Lock size={18} className="text-gray-400"/>
                                 </div>
-                                <input type={visiblePassword ? "text" : "password"} id="password" className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Password" />
+                                <input type={visiblePassword ? "text" : "password"} id="password" onChange={(e) => setPassword(e.target.value)} className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Password" />
                                 <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2" onClick={() => setVisiblePassword(!visiblePassword)}>
                                     {visiblePassword ? <Eye size={18} className="text-gray-400"/> : <EyeOff size={18} className="text-gray-400"/>}
                                 </button>
