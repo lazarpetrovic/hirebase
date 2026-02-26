@@ -32,10 +32,8 @@ export default function App() {
       <Contact />
       <Footer />  
       </>} />
-      <Route path="/signin" element={<><SignIn />
-      <Footer /></>} />
-      <Route path="/signup" element={<><SignUp />
-      <Footer /></>} />
+      <Route path="/signin" element={<><SignIn /></>} />
+      <Route path="/signup" element={<><SignUp /></>} />
     </Routes>
   )
 }
