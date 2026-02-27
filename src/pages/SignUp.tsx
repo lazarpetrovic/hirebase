@@ -1,8 +1,15 @@
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import google from "../assets/icons8-google-16.svg";
+import github from "../assets/github.png";
+import { auth, db } from "../firebase";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function SignUp() {
+
+    const navigate = useNavigate();
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -12,6 +19,8 @@ export default function SignUp() {
     const [visiblePassword, setVisiblePassword] = useState(false);
     const [passwordLength, setPasswordLength] = useState(false);
 
+    const provider = new GoogleAuthProvider();
+
     const handlePasswordLength = (password: string) => {
         if (password.length >= 8) {
             setPasswordLength(true);
@@ -20,11 +29,35 @@ export default function SignUp() {
         }
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(name, email, password, termsAndPrivacy);
-        // TODO: Implement sign up logic
-        // TODO: Implement sign up logic
+        
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            console.log(userCredential);
+
+            await setDoc(doc(db, "users", userCredential.user.uid), {
+                name: name,
+                email: email,
+                createdAt: new Date(),
+            });
+
+            console.log("User created successfully");
+
+            navigate('/signin');
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleGoogleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (
@@ -72,7 +105,7 @@ export default function SignUp() {
                             <input type="checkbox" id="terms" onChange={(e) => setTermsAndPrivacy(e.target.checked)} className="w-4 h-4 rounded border-[#E2E8F0] text-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20" />
                             <label htmlFor="terms" className="ml-2 text-[14px] text-gray-700">I agree to the <Link to="/terms" className="text-[#3b82f6] hover:text-[#2563EB] transition-colors">Terms of Service</Link> and <Link to="/privacy" className="text-[#3b82f6] hover:text-[#2563EB] transition-colors">Privacy Policy</Link></label>
                         </div>
-                        <button type="button" className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#3b82f6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-md">Create Account</button>
+                        <button type="submit" className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#3b82f6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-md">Create Account</button>
                     </form>
                     <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
@@ -83,10 +116,12 @@ export default function SignUp() {
                         </div>
                     </div>
                     <div className="flex items-center justify-center gap-3 mt-4">
-                        <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[#e2e8f0] text-gray-700 hover:bg-[#f8fafc] transition-all shadow-sm hover:shadow-md text-md">
+                        <button onClick={() => handleGoogleSignIn()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[#e2e8f0] text-gray-700 hover:bg-[#f8fafc] transition-all shadow-sm hover:shadow-md text-md">
+                            <img src={google} alt="Google" className="w-4 h-4" />
                             Google
                         </button>
                         <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[#e2e8f0] text-gray-700 hover:bg-[#f8fafc] transition-all shadow-sm hover:shadow-md text-md">
+                            <img src={github} alt="GitHub" className="w-4 h-4" />
                             Github
                         </button>
                     </div>

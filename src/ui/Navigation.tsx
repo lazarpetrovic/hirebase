@@ -9,8 +9,8 @@ export default function Navigation() {
 
     const scrollTo = (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault()
-        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-        setMobileMenuOpen(false)
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        setMobileMenuOpen(false);
     }
 
     const navLinks = [
@@ -55,8 +55,8 @@ export default function Navigation() {
                             <a key={id} href={href} onClick={scrollTo(id)} className="block text-gray-600 hover:text-gray-900 transition-colors text-[15px]">{label}</a>
                         ))}
                         <div className="pt-4 space-y-3">
-                            <button className="w-full px-4 py-2 rounded-xl bg-[#3B82F6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-[15px]">Sign In</button>
-                            <button className="w-full px-4 py-2 rounded-xl bg-[#3B82F6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-[15px]">Start Free</button>
+                            <button onClick={() => navigate('/signin')} className="w-full px-4 py-2 rounded-xl bg-[#3B82F6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-[15px]">Sign In</button>
+                            <button onClick={() => navigate('/signup')} className="w-full px-4 py-2 rounded-xl bg-[#3B82F6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-[15px]">Start Free</button>
                         </div>
                     </div>
                 </div>

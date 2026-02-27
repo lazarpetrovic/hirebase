@@ -19,8 +19,8 @@ export default function Contact() {
                 </div>
             )}
             <div className="mx-auto max-w-7xl">
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    <div className="col-start-2 md:col-start-1">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+                    <div className="order-2 lg:order-1">
                         <form ref={formRef} className="space-y-5" onSubmit={handleSubmit}>
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">Name</label>
@@ -63,7 +63,7 @@ export default function Contact() {
                             </button>
                         </form>
                     </div>
-                    <div className="text-center mb-12 col-start-1 md:col-start-2">
+                    <div className="text-center mb-12 grid-row-start-1 order-1 lg:order-2">
                         <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-4 tracking-tight">Get in touch</h2>
                         <p className="text-lg mx-auto max-w-[600px] font-light text-gray-600">
                             We're here to help you get the most out of Hirebase.
