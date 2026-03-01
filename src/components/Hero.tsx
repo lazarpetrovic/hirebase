@@ -2,6 +2,12 @@ import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 export default function Hero() {
     const navigate = useNavigate();
+
+    const scrollTo = (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault()
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+
     return (
         <section id="hero" className="bg-white py-16 md:py-24 lg:py-32 px-6 lg:px-8 overflow-x-hidden">
             <div className="mx-auto max-w-7xl">
@@ -18,13 +24,14 @@ export default function Hero() {
                             <button onClick={() => navigate('/signup')} className="px-8 py-3.5 rounded-xl bg-[#3B82F6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-[15px]">
                                 Start Free
                             </button>
-                            <button
+                            <a
                                 type="button"
-                                onClick={() => navigate('/product')}
+                                href="#product"
+                                onClick={scrollTo('product')}
                                 className="group gap-2 px-8 py-3.5 bg-white text-gray-700 border border-[#e2e8f0] rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-300 font-normal text-base inline-flex items-center justify-center"
                             >
                                 View Product <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300"/>
-                            </button>
+                            </a>
                         </div>
                         <p className="text-gray-500 font-light text-sm mt-6">
                             Used by <span className="font-medium text-gray-700">5,000+ job seekers</span> worldwide
