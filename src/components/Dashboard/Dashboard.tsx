@@ -55,7 +55,7 @@ export default function Dashboard() {
         <main className="pt-16 md:ml-50">
             <div className="p-6 md:p-8 max-w-[1400px] mx-auto space-y-8">
                 <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-                    Welcombe back, {user?.name}.
+                    Welcome back, {user?.name}.
                 </h1>
                 <p className="text-gray-600">
                     Here's a quick overview of your application progress.
