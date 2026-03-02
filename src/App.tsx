@@ -6,6 +6,7 @@ import Dashboard from "./components/Dashboard/Dashboard"
 import ProtectedRoute from "./ProtectedRoute"
 
 export default function App() {
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />

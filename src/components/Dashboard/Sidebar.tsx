@@ -5,8 +5,6 @@ export default function Sidebar() {
 
     const { user } = useAuth();
 
-    console.log(user);
-
     if (!user) {
         return null;
     }

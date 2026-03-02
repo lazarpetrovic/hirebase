@@ -1,5 +1,6 @@
 export interface Application {
     id: string; 
+    userId: string;
     company:string;
     position:string; 
     location:string;

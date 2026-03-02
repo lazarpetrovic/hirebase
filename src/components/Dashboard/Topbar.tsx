@@ -1,7 +1,11 @@
 import { Search } from "lucide-react";
 import { Plus } from "lucide-react";
 
-export default function Topbar() {
+interface TopbarProps {
+    handleOpenAddApplicationModal: () => void;
+}
+
+export default function Topbar({ handleOpenAddApplicationModal }: TopbarProps) {
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.value);
     }
@@ -16,7 +20,7 @@ export default function Topbar() {
                     </div>
                 </div>
                 <div>
-                    <button className="px-4 py-2 rounded-md bg-[#3b82f6] text-white hover:bg-[#2563EB] transition-all duration-300 inline-flex items-center gap-2">
+                    <button onClick={handleOpenAddApplicationModal} className="px-4 py-2 rounded-2xl bg-[#3b82f6] text-white hover:bg-[#2563EB] transition-all duration-300 inline-flex items-center gap-2">
                         <Plus size={16} />Add application
                     </button>
                 </div>

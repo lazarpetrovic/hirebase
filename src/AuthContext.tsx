@@ -29,28 +29,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
           const ref = doc(db, "users", firebaseUser.uid);
           const snap = await getDoc(ref);
-      
-          if (snap.exists()) {
-            setUser(snap.data() as User);
-          } else {
-            console.log("No Firestore profile found, using auth user");
-      
-            setUser({
-              uid: firebaseUser.uid,
-              email: firebaseUser.email ?? "",
-              name: firebaseUser.displayName ?? "",
-            });
-          }
-      
+        
+          const profileData = snap.exists() ? snap.data() : {};
+        
+          setUser({
+            uid: firebaseUser.uid,                 // ALWAYS from auth
+            email: firebaseUser.email ?? "",
+            name: profileData.name ?? "",
+          });
+        
         } catch (error) {
           console.error(error);
-      
-          // fallback — never wipe auth user
-          setUser({
-            uid: firebaseUser.uid,
-            email: firebaseUser.email ?? "",
-            name: firebaseUser.displayName ?? "",
-          });
         }
       
         setLoading(false);
