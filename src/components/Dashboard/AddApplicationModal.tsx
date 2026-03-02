@@ -7,16 +7,19 @@ type NewApplicationData = {
     location: string;
     dateApplied: string;
     status: string;
-};
+}
 
 const defaultDate = () => new Date().toISOString().slice(0, 10);
 
-export default function AddApplicationModal({ columns, isOpen, onClose, handleAddApplication }: { columns: { id: string; title: string; color: string }[]; isOpen: boolean; onClose: () => void; handleAddApplication: (data: NewApplicationData) => void }) {
+const validStatusIds = ["wishlist", "applied", "interview", "offer", "rejected"];
+
+export default function AddApplicationModal({ columns, isOpen, onClose, handleAddApplication, defaultStatus = "wishlist" }: { columns: { id: string; title: string; color: string }[]; isOpen: boolean; onClose: () => void; handleAddApplication: (data: NewApplicationData) => void; defaultStatus?: string }) {
+    const resolvedDefault = validStatusIds.includes(defaultStatus) ? defaultStatus : "wishlist";
     const [company, setCompany] = useState("");
     const [position, setPosition] = useState("");
     const [location, setLocation] = useState("");
     const [dateApplied, setDateApplied] = useState(defaultDate());
-    const [status, setStatus] = useState(columns[0]?.id ?? "wishlist");
+    const [status, setStatus] = useState(resolvedDefault);
 
     useEffect(() => {
         if (isOpen) {
@@ -24,9 +27,9 @@ export default function AddApplicationModal({ columns, isOpen, onClose, handleAd
             setPosition("");
             setLocation("");
             setDateApplied(defaultDate());
-            setStatus(columns[0]?.id ?? "wishlist");
+            setStatus(validStatusIds.includes(defaultStatus) ? defaultStatus : "wishlist");
         }
-    }, [isOpen, columns]);
+    }, [isOpen, defaultStatus]);
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

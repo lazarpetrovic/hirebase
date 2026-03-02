@@ -5,10 +5,11 @@ import { Briefcase, Calendar, CheckCircle, XCircle } from "lucide-react";
 import AnalyticsCard from "./AnalyticsCard";
 import { useEffect, useState } from "react";
 import type { Application } from "../../types/Application";
-import { addDoc, collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import ApplicationOverview from "./ApplicationOverview";
 import AddApplicationModal from "./AddApplicationModal";
+import EditApplicationModal from "./EditApplicationModal";
 
 const columns = [
   { id: "wishlist", title: "Wishlist", color: "border-[#9333EA]" },
@@ -69,13 +70,46 @@ export default function Dashboard() {
     const { user } = useAuth();
     const [applications, setApplications] = useState<Application[]>([]);
     const [isOpenAddApplicationModal, setIsOpenAddApplicationModal] = useState(false);
+    const [defaultStatusForModal, setDefaultStatusForModal] = useState<string>("wishlist");
+    const [applicationToEdit, setApplicationToEdit] = useState<Application | null>(null);
 
-    const handleOpenAddApplicationModal = () => {
+    const handleOpenAddApplicationModal = (columnId?: string) => {
+        setDefaultStatusForModal(columnId ?? "wishlist");
         setIsOpenAddApplicationModal(true);
     }
     const handleCloseAddApplicationModal = () => {
         setIsOpenAddApplicationModal(false);
     }
+
+    const handleOpenEditModal = (application: Application) => {
+        setApplicationToEdit(application);
+    };
+    const handleCloseEditModal = () => {
+        setApplicationToEdit(null);
+    };
+
+    const handleUpdateApplication = async (id: string, data: NewApplicationData) => {
+        if (!user) return;
+        try {
+            await updateDoc(doc(db, "jobApplications", id), {
+                company: data.company,
+                position: data.position,
+                location: data.location,
+                dateApplied: data.dateApplied,
+                status: data.status,
+            });
+            setApplications((prev) =>
+                prev.map((app) =>
+                    app.id === id
+                        ? { ...app, ...data, status: data.status as Application["status"] }
+                        : app
+                )
+            );
+            handleCloseEditModal();
+        } catch (error) {
+            console.error("Failed to update application:", error);
+        }
+    };
 
     const handleAddApplication = async (data: NewApplicationData) => {
       if (!user) return;
@@ -147,9 +181,10 @@ export default function Dashboard() {
                 ))}
                 </div>
             </div>
-            <ApplicationOverview applications={applications} columns={columns} handleOpenAddApplicationModal={handleOpenAddApplicationModal}/>
+            <ApplicationOverview applications={applications} columns={columns} handleOpenAddApplicationModal={handleOpenAddApplicationModal} onEditApplication={handleOpenEditModal}/>
         </main>
-        <AddApplicationModal columns={columns} isOpen={isOpenAddApplicationModal} onClose={handleCloseAddApplicationModal} handleAddApplication={handleAddApplication}/>
+        <AddApplicationModal columns={columns} isOpen={isOpenAddApplicationModal} onClose={handleCloseAddApplicationModal} handleAddApplication={handleAddApplication} defaultStatus={defaultStatusForModal}/>
+        <EditApplicationModal application={applicationToEdit} columns={columns} isOpen={!!applicationToEdit} onClose={handleCloseEditModal} onUpdate={handleUpdateApplication}/>
         </div>
     )
 }

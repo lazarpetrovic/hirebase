@@ -3,6 +3,7 @@ import type { Application } from "../../types/Application";
 
 interface JobAppCardProps {
     application: Application;
+    onEdit?: (application: Application) => void;
 }
 
 const statusColors = {
@@ -13,7 +14,7 @@ const statusColors = {
     rejected: { bg: "bg-[#FEE2E2]", text: "text-[#EF4444]", label: "Rejected" },
   };
 
-export default function JobAppCard({ application }: JobAppCardProps) {
+export default function JobAppCard({ application, onEdit }: JobAppCardProps) {
     const statusConfig = statusColors[application.status];
 
     // Generate a color based on company name for logo placeholder
@@ -36,7 +37,7 @@ export default function JobAppCard({ application }: JobAppCardProps) {
                 <div className={`w-10 h-10 ${getLogoColor(application.company)} flex items-center justify-center rounded-lg text-white font-semibold`}>
                     {application.company.charAt(0).toUpperCase()}
                 </div>
-                <button className="p-1 opacity-0 group-hover:opacity-100 hover:bg-[#f8fafc] rounded-lg transition-all">
+                <button type="button" onClick={() => onEdit?.(application)} className="p-1 opacity-0 group-hover:opacity-100 hover:bg-[#f8fafc] rounded-lg transition-all">
                     <MoreVertical className="w-4 h-4 text-gray-500" />
                 </button>
             </div>

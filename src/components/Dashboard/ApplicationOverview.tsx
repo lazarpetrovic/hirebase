@@ -3,12 +3,13 @@ import type { Application } from "../../types/Application";
 import JobAppCard from "./JobAppCard";
 
 interface ApplicationOverviewProps {
-    applications: Application[],
-    columns: { id: string, title: string, color: string }[],
-    handleOpenAddApplicationModal: () => void
+    applications: Application[];
+    columns: { id: string; title: string; color: string }[];
+    handleOpenAddApplicationModal: (columnId?: string) => void;
+    onEditApplication: (application: Application) => void;
 }
 
-export default function ApplicationOverview({ applications, columns, handleOpenAddApplicationModal }: ApplicationOverviewProps) {
+export default function ApplicationOverview({ applications, columns, handleOpenAddApplicationModal, onEditApplication }: ApplicationOverviewProps) {
     return (
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e2e8f0]">
             <div className="mb-6">
@@ -34,14 +35,14 @@ export default function ApplicationOverview({ applications, columns, handleOpenA
 
                             <div className="space-y-3 flex-1">
                                 {columnApplications.map((application) => (
-                                    <JobAppCard key={application.id} application={application} />
+                                    <JobAppCard key={application.id} application={application} onEdit={onEditApplication} />
                                 ))}
                                 {columnApplications.length === 0 && (
                                     <div className="bg-[#f8fafc] border-2 border-dashed border-[#e2e8f0] rounded-xl p-4 text-center">
                                         <span className="text-gray-500 text-sm">No applications</span>
                                     </div>
                                 )}
-                                <button onClick={handleOpenAddApplicationModal} className="w-full py-3 flex items-center justify-center gap-2 hover:bg-[#f8fafc] border-2 border-dashed border-[#e2e8f0] hover:border-[#3B82F6] transition-all duration-300 rounded-xl text-center text-gray-400 hover:text-[#3B82F6]">
+                                <button onClick={() => handleOpenAddApplicationModal(column.id)} className="w-full py-3 flex items-center justify-center gap-2 hover:bg-[#f8fafc] border-2 border-dashed border-[#e2e8f0] hover:border-[#3B82F6] transition-all duration-300 rounded-xl text-center text-gray-400 hover:text-[#3B82F6]">
                                     <PlusIcon className="w-4 h-4" />
                                     <span className="text-sm font-medium">Add</span>
                                 </button>
