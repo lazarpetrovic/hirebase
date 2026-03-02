@@ -1,4 +1,5 @@
 import { BarChart3, Briefcase, LayoutDashboard, Settings, User } from "lucide-react";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../AuthContext";
 
 export default function Sidebar() {
@@ -9,10 +10,10 @@ export default function Sidebar() {
         return null;
     }
     const menuItems = [
-        { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { id: "applications", label: "Applications", icon: Briefcase },
-        { id: "analytics", label: "Analytics", icon: BarChart3 },
-        { id: "settings", label: "Settings", icon: Settings },
+        { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/dashboard", end: true },
+        { id: "applications", label: "Applications", icon: Briefcase, to: "/dashboard/applications", end: false },
+        { id: "analytics", label: "Analytics", icon: BarChart3, to: "/dashboard/analytics", end: false },
+        { id: "settings", label: "Settings", icon: Settings, to: "/dashboard/settings", end: false },
       ];
       
     return (
@@ -23,11 +24,19 @@ export default function Sidebar() {
             <nav className="flex-1 pt-4">
                 <ul>
                     {menuItems.map((item) => (
-                        <li key={item.id} className="group flex items-center justify-start gap-2 p-4 hover:bg-[#f8fafc] transition-colors cursor-pointer">
-                            <div className="w-10 h-10 flex items-center justify-center rounded-md bg-[#3B82F6]/10">
-                                <item.icon size={20} className="text-[#3B82F6] group-hover:rotate-45 transition-transform duration-300"/>
-                            </div>
-                            <span className="text-gray-600 group-hover:text-[#3B82F6] transition-colors duration-300">{item.label}</span>
+                        <li key={item.id}>
+                            <NavLink
+                                to={item.to}
+                                end={item.end}
+                                className={({ isActive }) =>
+                                    `group flex items-center justify-start gap-2 p-4 transition-colors cursor-pointer ${isActive ? "bg-[#EFF6FF] text-[#3B82F6]" : "hover:bg-[#f8fafc] text-gray-600"}`
+                                }
+                            >
+                                <div className="w-10 h-10 flex items-center justify-center rounded-md bg-[#3B82F6]/10">
+                                    <item.icon size={20} className="text-[#3B82F6] group-hover:rotate-45 transition-transform duration-300"/>
+                                </div>
+                                <span className="group-hover:text-[#3B82F6] transition-colors duration-300">{item.label}</span>
+                            </NavLink>
                         </li>
                     ))}
                 </ul>
