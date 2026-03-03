@@ -1,14 +1,13 @@
 import { Search } from "lucide-react";
 import { Plus } from "lucide-react";
+import { useSearch } from "../../SearchContext";
 
 interface TopbarProps {
     handleOpenAddApplicationModal: () => void;
 }
 
 export default function Topbar({ handleOpenAddApplicationModal }: TopbarProps) {
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
-    }
+    const { searchQuery, setSearchQuery } = useSearch();
 
     return (
         <div className="fixed h-16 top-0 left-0 right-0 z-50 bg-white border-b border-[#e2e8f0] md:left-64 overflow-hidden">
@@ -16,7 +15,13 @@ export default function Topbar({ handleOpenAddApplicationModal }: TopbarProps) {
                 <div className="flex-1 max-w-md">
                     <div className="relative">
                         <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#64748b]" />
-                        <input type="text" onChange={handleSearch} placeholder="Search" className="w-full h-full pl-10 pr-4 py-2 rounded-md border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] transition-all duration-300" />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search applications…"
+                            className="w-full h-full pl-10 pr-4 py-2 rounded-md border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] transition-all duration-300"
+                        />
                     </div>
                 </div>
                 <div>

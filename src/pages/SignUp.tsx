@@ -1,10 +1,8 @@
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import google from "../assets/icons8-google-16.svg";
-import github from "../assets/github.png";
 import { auth, db } from "../firebase";
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
 export default function SignUp() {
@@ -18,8 +16,8 @@ export default function SignUp() {
 
     const [visiblePassword, setVisiblePassword] = useState(false);
     const [passwordLength, setPasswordLength] = useState(false);
-
-    const provider = new GoogleAuthProvider();
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handlePasswordLength = (password: string) => {
         if (password.length >= 8) {
@@ -31,34 +29,41 @@ export default function SignUp() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(name, email, password, termsAndPrivacy);
-        
+        setError("");
+        setLoading(true);
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(userCredential);
 
             await setDoc(doc(db, "users", userCredential.user.uid), {
-                name: name,
-                email: email,
+                name: name.trim(),
+                email: userCredential.user.email ?? email,
+                role: "user",
                 createdAt: new Date(),
+                termsAndPrivacy: termsAndPrivacy,
             });
 
-            console.log("User created successfully");
-
-            navigate('/signin');
-        } catch (error) {
-            console.error(error);
+            navigate("/dashboard");
+        } catch (err: unknown) {
+            const code = err && typeof err === "object" && "code" in err ? (err as { code: string }).code : "";
+            const message =
+                code === "auth/email-already-in-use"
+                    ? "An account with this email already exists. Sign in or use a different email."
+                    : code === "auth/invalid-email"
+                        ? "Please enter a valid email address."
+                        : code === "auth/weak-password"
+                            ? "Password is too weak. Use at least 8 characters."
+                            : code === "auth/operation-not-allowed"
+                                ? "Email sign-up is not enabled. Please contact support."
+                                : code === "auth/too-many-requests"
+                                    ? "Too many attempts. Please try again later."
+                                    : typeof err === "object" && err !== null && "message" in err
+                                        ? String((err as { message: unknown }).message)
+                                        : "Could not create account. Please try again.";
+            setError(message);
+        } finally {
+            setLoading(false);
         }
-    }
-
-    const handleGoogleSignIn = async () => {
-        try {
-            const result = await signInWithPopup(auth, provider);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#ffffff] flex items-center justify-center px-6 py-20">
@@ -70,13 +75,18 @@ export default function SignUp() {
                 </div>
                 <div className="border border-[#e2e8f0] rounded-2xl p-8 shadow-xl bg-white">
                     <form onSubmit={handleSubmit}>
+                        {error && (
+                            <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+                                {error}
+                            </div>
+                        )}
                         <div className="mb-4">
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                             <div className="relative">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                     <User size={18} className="text-gray-400"/>
                                 </div>
-                                <input type="text" id="name" onChange={(e) => setName(e.target.value)} className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Name" />
+                                <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Name" />
                             </div>
                         </div>
                         <div className="mb-4">
@@ -85,7 +95,7 @@ export default function SignUp() {
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                     <Mail size={18} className="text-gray-400"/>
                                 </div>
-                                <input type="email" id="email" onChange={(e) => setEmail(e.target.value)} className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Email" />
+                                <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300" placeholder="Email" />
                             </div>
                         </div>
                         <div className="mb-4">
@@ -105,26 +115,10 @@ export default function SignUp() {
                             <input type="checkbox" id="terms" onChange={(e) => setTermsAndPrivacy(e.target.checked)} className="w-4 h-4 rounded border-[#E2E8F0] text-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20" />
                             <label htmlFor="terms" className="ml-2 text-[14px] text-gray-700">I agree to the <Link to="/terms" className="text-[#3b82f6] hover:text-[#2563EB] transition-colors">Terms of Service</Link> and <Link to="/privacy" className="text-[#3b82f6] hover:text-[#2563EB] transition-colors">Privacy Policy</Link></label>
                         </div>
-                        <button type="submit" className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#3b82f6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-md">Create Account</button>
+                        <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#3b82f6] text-white hover:bg-[#2563EB] transition-colors shadow-sm hover:shadow-md text-md disabled:opacity-70 disabled:cursor-not-allowed">
+                            {loading ? "Creating account…" : "Create Account"}
+                        </button>
                     </form>
-                    <div className="relative my-6">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-[#e2e8f0]" />
-                        </div>
-                        <div className="relative flex justify-center text-[13px]">
-                            <span className="px-3 bg-white font-light text-gray-500">Or sign up with</span>
-                        </div>
-                    </div>
-                    <div className="flex items-center justify-center gap-3 mt-4">
-                        <button onClick={() => handleGoogleSignIn()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[#e2e8f0] text-gray-700 hover:bg-[#f8fafc] transition-all shadow-sm hover:shadow-md text-md">
-                            <img src={google} alt="Google" className="w-4 h-4" />
-                            Google
-                        </button>
-                        <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[#e2e8f0] text-gray-700 hover:bg-[#f8fafc] transition-all shadow-sm hover:shadow-md text-md">
-                            <img src={github} alt="GitHub" className="w-4 h-4" />
-                            Github
-                        </button>
-                    </div>
                 </div>
                 <div>
                     <p className="text-center text-sm text-gray-500 font-light mt-6 leading-relaxed">Already have an account? <Link to="/signin" className="text-[#3b82f6] hover:text-[#2563EB] transition-colors">Sign In</Link></p>
