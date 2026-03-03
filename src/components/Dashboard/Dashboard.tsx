@@ -1,14 +1,14 @@
 import { useAuth } from "../../AuthContext";
+import { useApplications } from "../../ApplicationsContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Briefcase, Calendar, CheckCircle, XCircle } from "lucide-react";
 import AnalyticsCard from "./AnalyticsCard";
 import { useEffect, useState } from "react";
 import type { Application } from "../../types/Application";
-import { addDoc, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
-import { db } from "../../firebase";
 import ApplicationOverview from "./ApplicationOverview";
 import AddApplicationModal from "./AddApplicationModal";
 import EditApplicationModal from "./EditApplicationModal";
+import type { NewApplicationData } from "../../ApplicationsContext";
 
 const columns = [
   { id: "wishlist", title: "Wishlist", color: "border-[#9333EA]" },
@@ -25,19 +25,11 @@ const summaryCardConfig = [
     { title: "Rejected", status: "rejected" as const, icon: XCircle, iconBackground: "bg-[#FEE2E2]", iconColor: "text-[#EF4444]" },
 ];
 
-type NewApplicationData = {
-  company: string;
-  position: string;
-  location: string;
-  dateApplied: string;
-  status: string;
-}
-
 export default function Dashboard() {
     const { user } = useAuth();
+    const { applications, handleAddApplication, handleUpdateApplication } = useApplications();
     const location = useLocation();
     const navigate = useNavigate();
-    const [applications, setApplications] = useState<Application[]>([]);
     const [isOpenAddApplicationModal, setIsOpenAddApplicationModal] = useState(false);
     const [defaultStatusForModal, setDefaultStatusForModal] = useState<string>("wishlist");
     const [applicationToEdit, setApplicationToEdit] = useState<Application | null>(null);
@@ -66,77 +58,23 @@ export default function Dashboard() {
         setApplicationToEdit(null);
     };
 
-    const handleUpdateApplication = async (id: string, data: NewApplicationData) => {
-        if (!user) return;
+    const onUpdateApplication = async (id: string, data: NewApplicationData) => {
         try {
-            await updateDoc(doc(db, "jobApplications", id), {
-                company: data.company,
-                position: data.position,
-                location: data.location,
-                dateApplied: data.dateApplied,
-                status: data.status,
-            });
-            setApplications((prev) =>
-                prev.map((app) =>
-                    app.id === id
-                        ? { ...app, ...data, status: data.status as Application["status"] }
-                        : app
-                )
-            );
+            await handleUpdateApplication(id, data);
             handleCloseEditModal();
         } catch (error) {
             console.error("Failed to update application:", error);
         }
     };
 
-    const handleAddApplication = async (data: NewApplicationData) => {
-      if (!user) return;
-      try {
-        const docRef = await addDoc(collection(db, "jobApplications"), {
-          userId: user.uid,
-          ...data,
-        });
-        const newApp: Application = {
-          id: docRef.id,
-          userId: user.uid,
-          company: data.company,
-          position: data.position,
-          location: data.location,
-          dateApplied: data.dateApplied,
-          status: data.status as "wishlist" | "applied" | "interview" | "offer" | "rejected",
-        };
-        setApplications((prev) => [newApp, ...prev]);
-        handleCloseAddApplicationModal();
-      } catch (error) {
-        console.error("Failed to add application:", error);
-      }
-    }
-
-    useEffect(() => {
-        if (!user) return;
-      
-        const fetchApplications = async () => {
-          const applicationsRef = collection(db, "jobApplications");
-
-          const q = query(
-            applicationsRef,
-            where("userId", "==", user.uid),
-            orderBy("dateApplied", "desc")
-          );
-      
-          const snapshot = await getDocs(q);
-
-          const applications = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          })) as Application[];
-      
-          setApplications(applications);
-        };
-      
-        fetchApplications();
-      
-      }, [user]);
+    const onAddApplication = async (data: NewApplicationData) => {
+        try {
+            await handleAddApplication(data);
+            handleCloseAddApplicationModal();
+        } catch (error) {
+            console.error("Failed to add application:", error);
+        }
+    };
 
     return (
         <>
@@ -167,8 +105,8 @@ export default function Dashboard() {
                 </div>
             <ApplicationOverview applications={applications} columns={columns} handleOpenAddApplicationModal={handleOpenAddApplicationModal} onEditApplication={handleOpenEditModal}/>
         </div>
-        <AddApplicationModal columns={columns} isOpen={isOpenAddApplicationModal} onClose={handleCloseAddApplicationModal} handleAddApplication={handleAddApplication} defaultStatus={defaultStatusForModal}/>
-        <EditApplicationModal application={applicationToEdit} columns={columns} isOpen={!!applicationToEdit} onClose={handleCloseEditModal} onUpdate={handleUpdateApplication}/>
+        <AddApplicationModal columns={columns} isOpen={isOpenAddApplicationModal} onClose={handleCloseAddApplicationModal} handleAddApplication={onAddApplication} defaultStatus={defaultStatusForModal}/>
+        <EditApplicationModal application={applicationToEdit} columns={columns} isOpen={!!applicationToEdit} onClose={handleCloseEditModal} onUpdate={onUpdateApplication}/>
         </>
     )
 }

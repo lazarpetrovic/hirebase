@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../AuthContext";
+import { useState } from "react";
+import { useApplications } from "../../ApplicationsContext";
+import { useSearch } from "../../SearchContext";
 import type { Application } from "../../types/Application";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import { db } from "../../firebase";
 import { Briefcase, Search, Trash2 } from "lucide-react";
 
 const statusLabels: Record<Application["status"], string> = {
@@ -30,14 +29,24 @@ function formatDate(value: string | unknown): string {
     return "—";
 }
 
-export default function Applications({ handleDeleteApplication }: { handleDeleteApplication: (id: string) => void }) {
-    const { user } = useAuth();
-    const [applications, setApplications] = useState<Application[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState("");
+export default function Applications() {
+    const { applications, loading, handleDeleteApplication } = useApplications();
+    const { searchQuery, setSearchQuery } = useSearch();
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    const onDelete = async (id: string) => {
+        setDeletingId(id);
+        try {
+            await handleDeleteApplication(id);
+        } catch (err) {
+            console.error("Failed to delete application:", err);
+        } finally {
+            setDeletingId(null);
+        }
+    };
 
     const filteredApplications = applications.filter((app) => {
-        const term = search.trim().toLowerCase();
+        const term = searchQuery.trim().toLowerCase();
         if (!term) return true;
         const company = (app.company ?? "").toLowerCase();
         const position = (app.position ?? "").toLowerCase();
@@ -45,26 +54,6 @@ export default function Applications({ handleDeleteApplication }: { handleDelete
         const statusLabel = statusLabels[app.status].toLowerCase();
         return company.includes(term) || position.includes(term) || location.includes(term) || statusLabel.includes(term);
     });
-
-    useEffect(() => {
-        if (!user) return;
-        const applicationsRef = collection(db, "jobApplications");
-        const q = query(
-            applicationsRef,
-            where("userId", "==", user.uid),
-            orderBy("dateApplied", "desc")
-        );
-        getDocs(q)
-            .then((snapshot) => {
-                const list = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                })) as Application[];
-                setApplications(list);
-            })
-            .catch((err) => console.error(err))
-            .finally(() => setLoading(false));
-    }, [user]);
 
     if (loading) {
         return (
@@ -85,8 +74,8 @@ export default function Applications({ handleDeleteApplication }: { handleDelete
                     <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                         type="text"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search company, position, location, status…"
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/20 focus:border-[#3B82F6] text-gray-900 placeholder-gray-400"
                     />
@@ -102,7 +91,7 @@ export default function Applications({ handleDeleteApplication }: { handleDelete
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
-                        {search.trim() && (
+                        {searchQuery.trim() && (
                             <p className="px-4 py-2 text-sm text-gray-500 bg-[#f8fafc] border-b border-[#e2e8f0]">
                                 Showing {filteredApplications.length} of {applications.length} applications
                             </p>
@@ -115,12 +104,13 @@ export default function Applications({ handleDeleteApplication }: { handleDelete
                                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Location</th>
                                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Status</th>
                                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Date applied</th>
+                                    <th className="w-12 py-4 px-4" aria-label="Actions" />
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredApplications.length === 0 ? (
                                     <tr>
-                                        <td colSpan={5} className="py-12 text-center text-gray-500">
+                                        <td colSpan={6} className="py-12 text-center text-gray-500">
                                             No applications match your search.
                                         </td>
                                     </tr>
@@ -136,9 +126,15 @@ export default function Applications({ handleDeleteApplication }: { handleDelete
                                             </span>
                                         </td>
                                         <td className="py-4 px-4 text-gray-600">{formatDate(app.dateApplied)}</td>
-                                        <td className="py-5 px-5 flex items-center justify-center">
-                                            <button onClick={() => handleDeleteApplication(app.id)}>
-                                                <Trash2 size={20} className="text-red-500 hover:text-red-800 cursor-pointer" />
+                                        <td className="py-4 px-4">
+                                            <button
+                                                type="button"
+                                                onClick={() => onDelete(app.id)}
+                                                disabled={deletingId === app.id}
+                                                className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                                                title="Delete"
+                                            >
+                                                <Trash2 size={18} />
                                             </button>
                                         </td>
                                     </tr>
