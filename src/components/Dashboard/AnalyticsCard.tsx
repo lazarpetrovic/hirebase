@@ -13,7 +13,7 @@ interface SummaryCardProps {
 
 export default function AnalyticsCard({ title, value, icon: Icon, change, changeType, iconColor, iconBackground }: SummaryCardProps) {
     return (
-        <div className="bg-white rounded-xl shadow-xl border border-[#e2e8f0] p-6 hover:shadow-2xl hover:translate-y-[-4px] transition-all duration-300">
+        <div className="bg-white md:mb-3 rounded-xl shadow-xl border border-[#e2e8f0] p-6 hover:shadow-2xl hover:translate-y-[-4px] transition-all duration-300">
             <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-col items-start justify-center">
                     <h3 className="text-sm text-gray-600 mb-1">{title}</h3>

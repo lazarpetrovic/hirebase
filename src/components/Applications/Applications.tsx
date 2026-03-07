@@ -96,7 +96,7 @@ export default function Applications() {
                                 Showing {filteredApplications.length} of {applications.length} applications
                             </p>
                         )}
-                        <table className="w-full">
+                        <table className="w-full min-w-[640px]">
                             <thead>
                                 <tr className="border-b border-[#e2e8f0] bg-[#f8fafc]">
                                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Company</th>
@@ -104,7 +104,7 @@ export default function Applications() {
                                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Location</th>
                                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Status</th>
                                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Date applied</th>
-                                    <th className="w-12 py-4 px-4" aria-label="Actions" />
+                                    <th className="sticky right-0 w-14 min-w-[3.5rem] py-4 pl-4 pr-4 bg-[#f8fafc] text-left" aria-label="Actions" />
                                 </tr>
                             </thead>
                             <tbody>
@@ -116,7 +116,7 @@ export default function Applications() {
                                     </tr>
                                 ) : (
                                 filteredApplications.map((app) => (
-                                    <tr key={app.id} className="border-b border-[#e2e8f0] hover:bg-[#f8fafc] transition-colors">
+                                    <tr key={app.id} className="group border-b border-[#e2e8f0] hover:bg-[#f8fafc] transition-colors">
                                         <td className="py-4 px-4 text-gray-900 font-medium">{app.company}</td>
                                         <td className="py-4 px-4 text-gray-700">{app.position}</td>
                                         <td className="py-4 px-4 text-gray-600">{app.location || "—"}</td>
@@ -126,15 +126,16 @@ export default function Applications() {
                                             </span>
                                         </td>
                                         <td className="py-4 px-4 text-gray-600">{formatDate(app.dateApplied)}</td>
-                                        <td className="py-4 px-4">
+                                        <td className="sticky right-0 py-4 pl-4 pr-4 bg-white border-l border-[#e2e8f0]">
                                             <button
                                                 type="button"
                                                 onClick={() => onDelete(app.id)}
                                                 disabled={deletingId === app.id}
-                                                className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                                                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 touch-manipulation"
                                                 title="Delete"
+                                                aria-label="Delete application"
                                             >
-                                                <Trash2 size={18} />
+                                                <Trash2 size={20} />
                                             </button>
                                         </td>
                                     </tr>

@@ -44,6 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
   
       try {
+        setLoading(true);
         await fetchUserProfile(firebaseUser);
       } finally {
         setLoading(false);
