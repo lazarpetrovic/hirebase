@@ -7,6 +7,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { Download, Trash2 } from "lucide-react";
+import * as XLSX from "xlsx";
 
 export default function DataSection() {
     const { user } = useAuth();
@@ -29,27 +30,19 @@ export default function DataSection() {
         setMessage(null);
         setExporting(true);
         try {
-            const headers = ["id", "company", "position", "location", "status", "dateApplied"];
-            const headerRow = headers.map(escapeCsvCell).join(",");
-            const dataRows = applications.map((app) =>
-                [
-                    app.id,
-                    app.company,
-                    app.position,
-                    app.location ?? "",
-                    app.status,
-                    typeof app.dateApplied === "string" ? app.dateApplied.slice(0, 10) : "",
-                ].map(escapeCsvCell).join(",")
-            );
-            const csv = [headerRow, ...dataRows].join("\n");
-            const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `hirebase-applications-${new Date().toISOString().slice(0, 10)}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-            setMessage({ type: "success", text: "Download started." });
+            const formattedData = applications.map((app) => ({
+                Company: app.company,
+                Position: app.position,
+                Status: app.status,
+                "Date Applied": app.dateApplied
+              }));
+            
+              const worksheet = XLSX.utils.json_to_sheet(formattedData);
+              const workbook = XLSX.utils.book_new();
+            
+              XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
+            
+              XLSX.writeFile(workbook, "job-applications.xlsx");
         } catch (err) {
             console.error(err);
             setMessage({ type: "error", text: "Export failed. Try again." });
