@@ -76,6 +76,7 @@ export function ApplicationsProvider({ children }: { children: React.ReactNode }
             location: data.location,
             dateApplied: data.dateApplied,
             status: data.status as Application["status"],
+            createdAt: new Date().toISOString()
         };
         setApplications((prev) => [newApp, ...prev]);
     };

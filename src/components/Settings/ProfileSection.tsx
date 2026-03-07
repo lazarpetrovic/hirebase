@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useAuth } from "../../AuthContext";
 import { db } from "../../firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { User } from "lucide-react";
 
 export default function ProfileSection() {
-    const { user } = useAuth();
+    const { user, refreshUser } = useAuth();
     const [name, setName] = useState(user?.name ?? "");
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -16,9 +16,9 @@ export default function ProfileSection() {
         setMessage(null);
         setSaving(true);
         try {
-            await updateDoc(doc(db, "users", user.uid), { name: name.trim() });
-            setMessage({ type: "success", text: "Profile updated. Refreshing…" });
-            window.location.reload();
+            await setDoc(doc(db, "users", user.uid), { name: name.trim() }, { merge: true });
+            await refreshUser();
+            setMessage({ type: "success", text: "Profile updated." });
         } catch (err) {
             console.error(err);
             setMessage({ type: "error", text: "Could not update profile. Try again." });

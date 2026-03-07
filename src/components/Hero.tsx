@@ -42,7 +42,7 @@ export default function Hero() {
                             <img
                             src="https://images.unsplash.com/photo-1758411898021-ef0dadaaa295?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBkYXNoYm9hcmQlMjBpbnRlcmZhY2V8ZW58MXx8fHwxNzcxNzkxMjM0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
                             alt="Hero Image"
-                            className="w-full h-full object-cover"
+                            className="w-full h-[700px] object-cover"
                             />
                         </div>
                         <div className="absolute -bottom-4 -right-4 w-full h-full bg-gradient-to-br from-[#3b82f6]/20 to-[#22c55e]/20 rounded-2xl -z-10"/>
