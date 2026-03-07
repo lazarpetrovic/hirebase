@@ -22,7 +22,7 @@ export default function AnalyticsCard({ title, value, icon: Icon, change, change
                         {changeType === 'increase' ? (<TrendingUp className="w-4 h-4 text-[#22c55e]" />) 
                         : (<TrendingDown className="w-4 h-4 text-[#ef4444]" />)}
                         <span className={`text-sm font-medium ${changeType === 'increase' ? 'text-[#22c55e]' : 'text-[#ef4444]'}`}>{change}%</span>
-                        <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                        <span className="text-sm text-gray-500 ml-1">vs last week</span>
                     </div>
                 </div>
                 <div className={`w-12 h-12 ${iconBackground} rounded-xl flex items-center justify-center`}>

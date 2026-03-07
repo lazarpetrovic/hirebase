@@ -7,16 +7,33 @@ import type { User } from "./types/User";
 type AuthContextType = {
   user: User | null;
   loading: boolean;
+  refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  refreshUser: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(auth.currentUser as User | null);
   const [loading, setLoading] = useState(true);
+
+  const fetchUserProfile = async (firebaseUser: { uid: string; email: string | null }) => {
+    try {
+      const ref = doc(db, "users", firebaseUser.uid);
+      const snap = await getDoc(ref);
+      const profileData = snap.exists() ? snap.data() : {};
+      setUser({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email ?? "",
+        name: profileData.name ?? "",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -25,31 +42,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setLoading(false);
           return;
         }
-      
-        try {
-          const ref = doc(db, "users", firebaseUser.uid);
-          const snap = await getDoc(ref);
-        
-          const profileData = snap.exists() ? snap.data() : {};
-        
-          setUser({
-            uid: firebaseUser.uid,                 // ALWAYS from auth
-            email: firebaseUser.email ?? "",
-            name: profileData.name ?? "",
-          });
-        
-        } catch (error) {
-          console.error(error);
-        }
-      
+        await fetchUserProfile(firebaseUser);
         setLoading(false);
       });
 
     return () => unsubscribe();
   }, []);
 
+  const refreshUser = async () => {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) return;
+    await fetchUserProfile(firebaseUser);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

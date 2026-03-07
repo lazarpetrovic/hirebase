@@ -1,6 +1,7 @@
 import { PlusIcon } from "lucide-react";
 import type { Application } from "../../types/Application";
 import JobAppCard from "./JobAppCard";
+import { useSearch } from "../../SearchContext";
 
 interface ApplicationOverviewProps {
     applications: Application[];
@@ -10,6 +11,8 @@ interface ApplicationOverviewProps {
 }
 
 export default function ApplicationOverview({ applications, columns, handleOpenAddApplicationModal, onEditApplication }: ApplicationOverviewProps) {
+    const { searchQuery } = useSearch();
+    
     return (
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e2e8f0]">
             <div className="mb-6">
@@ -18,7 +21,9 @@ export default function ApplicationOverview({ applications, columns, handleOpenA
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 {columns.map((column) => {
-                    const columnApplications = applications.filter((application) => application.status === column.id);
+                    const columnApplications = applications.filter((application) => application.status === column.id).filter(
+                        (application) => !searchQuery.trim() || application.company.toLowerCase().includes(searchQuery.toLowerCase()) 
+                        || application.position.toLowerCase().includes(searchQuery.toLowerCase()) || application.location.toLowerCase().includes(searchQuery.toLowerCase()));
                     return (
                         <div key={column.id} className={'flex flex-col'}>
                             <div className="mb-4">

@@ -7,4 +7,5 @@ export interface Application {
     status: "wishlist" | "applied" | "interview" | "offer" | "rejected";
     dateApplied: string;
     logo?: string;
+    createdAt: string;
 }
