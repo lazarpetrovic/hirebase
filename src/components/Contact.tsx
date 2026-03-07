@@ -63,7 +63,7 @@ export default function Contact() {
                             </button>
                         </form>
                     </div>
-                    <div className="text-center mb-12 grid-row-start-1 order-1 lg:order-2">
+                    <div className="text-center flex flex-col items-center justify-center mb-12 grid-row-start-1 order-1 lg:order-2">
                         <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-4 tracking-tight">Get in touch</h2>
                         <p className="text-lg mx-auto max-w-[600px] font-light text-gray-600">
                             We're here to help you get the most out of Hirebase.

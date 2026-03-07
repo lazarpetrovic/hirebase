@@ -17,7 +17,7 @@ const columns = [
   { id: "offer", title: "Offer", color: "border-[#22C55E]" },
   { id: "rejected", title: "Rejected", color: "border-[#EF4444]" },
 ];
-
+//TODO: add responsive menu in dashboard, hide analytics card on lower then md screen, put it as tab in menu as analytics. 
 const summaryCardConfig = [
     { title: "Total Applications", status: null as Application["status"] | null, icon: Briefcase, iconBackground: "bg-[#EFF6FF]", iconColor: "text-[#3B82F6]" },
     { title: "Interviews", status: "interview" as const, icon: Calendar, iconBackground: "bg-[#FEF3C7]", iconColor: "text-[#F59E0B]" },

@@ -17,7 +17,7 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(auth.currentUser as User | null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchUserProfile = async (firebaseUser: { uid: string; email: string | null }) => {
@@ -37,16 +37,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        if (!firebaseUser) {
-          setUser(null);
-          setLoading(false);
-          return;
-        }
-        await fetchUserProfile(firebaseUser);
+      if (!firebaseUser) {
+        setUser(null);
         setLoading(false);
-      });
-
-    return () => unsubscribe();
+        return;
+      }
+  
+      try {
+        await fetchUserProfile(firebaseUser);
+      } finally {
+        setLoading(false);
+      }
+    });
+  
+    return unsubscribe;
   }, []);
 
   const refreshUser = async () => {
